@@ -1,0 +1,150 @@
+npm i  express mongoose multer cors 
+multer-gridfs-storage gridfs-stream body-parser path pusher
+
+then in package.json,
+change "type": "module",
+i/s scripts,
+"start": "node server.js"
+add .gitignore = node_modules
+
+Now add,
+Server.js:
+import everything 
+Grid.mongo = mongoose.mongo // the storage that we'll be adding our images to
+ 
+// app config
+const app = express()
+const port = process.env.port || 9000
+
+//middlewares
+app.use(bodyparser.json())
+app.use(cors())
+
+
+//db config
+const mongoURI ='mongodb+srv://fbClient:pYprWHM6MKKxgWnQ@cluster0.gnzsg.mongodb.net/facebook-db?retryWrites=true&w=majority'
+
+const conn = mongoose.createConnection(mongoURI,{
+    useCreateIndex:true,
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+})
+
+//once the db is connected
+gfs = grid fs it is a grid file system for mongodb
+it is normally created for files that are larger than 
+16mb. But we'll just use this for every single file
+
+
+
+conn.once('open',()=>{
+    cl(db connected)
+
+    // create the grid the connection db will be i/s here and we'll pass the mongoose.mongo
+    gfs = Grid(conn.db,mongoose.mongo)
+
+    //And the gfs collection where we want to save all these images  is gonna be images
+    gfs is storing stuff in 200kbs of chunks das how we are actually saving it
+    and we put it together when we are retreiving stuff
+
+    gfs.collection('images')
+})
+
+//Creating the storage
+
+const storage = new GridFsStorage({
+    usl:mongoURI,
+
+    //schema for the files
+    file:(req,file)=>{
+        return new Promise((resolve,reject)=>{
+            const fileName = 'image-${Date.now()}${path.extname(file.originalname)}'
+
+            const fileInfo={
+                filename:filename,
+                bucketName:'images' //as we our saving our stuff into the images collection
+            }
+            resolve(fileInfo)
+        })
+    }
+})
+
+//whenever we are uploading a file to this server 
+it's going to be using above 'storage' to store immd
+const upload = multer({storage});
+
+mongoose.connect(mongoURI,{
+     useCreateIndex:true,
+    useNewUrlParser:true,
+    useUnifiedTopology:true
+})
+
+//api routes
+app.get("/",function(res,req){
+    res.status(200).send("Hello");
+})
+
+
+// we attach a file upload.single one whenever there is a call on the given route 
+//it'll send back the file and all the detail
+app.post('/upload/image',upload.single('file'),(req,res){
+    res.status(201).send(req.file)
+})
+
+//use postman
+lh:9000/upload/image
+go to body->form data-> set the text to file 
+use key:file (it'll be considered as fieldname) there should be a field that should've a file name and
+that's where our file will be
+and select the image 
+
+//listen
+app.listen(9000,function(){
+    console.log("everythingis running up on 9000//or${port}")
+})
+
+Run it open postman,
+lh:9000 GET
+
+MONGODB:
+cluster got set up press connect your application
+
+//SCHEMA for our db
+create postmodel.js,
+
+import mongoose
+const postmodel=mongoose.Schema({
+     user:String,
+     imgName:String,
+     text:String,  //text of the post
+     avatar:String //whenever the person in loggin in with google we'll be saving the avatar to 
+     the db so that when we refresh the appl. and render out everything again we'll see the fresh avatar going on
+     timestamp: String
+})
+export default mongoose.model('posts',postModel)
+//we will be exp mong.model and we need to 
+give the coll name here where we want to save it 
+
+
+//Go back to server.js
+import mongoPosts from './postModel.js'
+
+//api routes
+
+SAVE A POST 
+1- save the img first into the storage into the images coll
+2- saving the img name w/ the post to another coll  
+so that way w'll have track of everything to which image goes with which post
+
+app.post('/upload/post',(req,res)=>{
+    const dbpost = req.body
+
+    creating a doc i/s of the coll w/ the dbpost
+    mongoPosts.create(dbpost , (err,data)=>{
+        if(err){
+            cl(err)
+        }else{
+            res.status(201).send(data)
+        }
+    })
+})
