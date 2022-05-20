@@ -1,34 +1,51 @@
-import React from 'react'
-import './Sidebar.css'
-import SidebarRow from './SidebarRow'
-import LocalHospitalIcon from '@material-ui/icons/LocalHospital'
-import EmojiFlagsIcon from '@material-ui/icons/EmojiFlags'
-import PeopleIcon from '@material-ui/icons/People'
-import ChatIcon from '@material-ui/icons/Chat'
-import StorefrontIcon from '@material-ui/icons/Storefront'
-import VideoLibraryIcon from '@material-ui/icons/VideoLibrary'
-import ExpandMoreOutlined from '@material-ui/icons/ExpandMoreOutlined'
-import { useStateValue } from '../StateProvider'
-
-
+import React from 'react';
+import "./Sidebar.css";
+import Sidebarrow from './Sidebarrow';
+import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import EmojiFlagsIcon from '@mui/icons-material/EmojiFlags';
+import PeopleIcon from '@mui/icons-material/People';
+import ChatIcon from '@mui/icons-material/Chat';
+import StorefrontIcon from '@mui/icons-material/Storefront';
+import VideoLibraryIcon from '@mui/icons-material/VideoLibrary';
+import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 const Sidebar = () => {
-    const [{ user }, dispatch] = useStateValue()
-
-    return (
-        <div>
-            {/* <SidebarRow src={user.photoURL} title={user.displayName} /> */}
-            <SidebarRow src={user.photoURL} title={user.displayName} />
-            <SidebarRow Icon={LocalHospitalIcon} title='COVID-19 Information Center' />
-
-            <SidebarRow Icon={EmojiFlagsIcon} title='Pages' />
-            <SidebarRow Icon={PeopleIcon} title='Friends' />
-            <SidebarRow Icon={ChatIcon} title='Messenger' />
-            <SidebarRow Icon={StorefrontIcon} title='Marketplace' />
-
-            <SidebarRow Icon={VideoLibraryIcon} title='Videos' />
-            <SidebarRow Icon={ExpandMoreOutlined} title='More' />
-        </div>
-    )
+  return (
+    <div className='sidebar'>
+    <Sidebarrow 
+    src='data:image/jpeg;base64,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'
+    title='An image'
+    />
+    <Sidebarrow
+    title='hospital Icon'
+    Icon={LocalHospitalIcon}
+    />
+    <Sidebarrow
+    title='emoji Icon'
+    Icon={EmojiFlagsIcon}
+    />
+    <Sidebarrow
+    title='People Icon'
+    Icon={PeopleIcon}
+    />
+    <Sidebarrow
+    title='Chat Icon'
+    Icon={ChatIcon}
+    />
+    <Sidebarrow
+    title='Store front Icon'
+    Icon={StorefrontIcon}
+    />
+    <Sidebarrow
+    title='Videolibrary Icon'
+    Icon={VideoLibraryIcon}
+    />
+    <Sidebarrow
+    title='Expand more Icon'
+    Icon={ExpandMoreOutlinedIcon}
+    />
+    
+    </div>
+  )
 }
 
 export default Sidebar

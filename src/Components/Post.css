@@ -1,65 +1,53 @@
-.post {
+.Post{
     width: 100%;
-    margin-top: 15px;
+    background-color: rgb(202, 231, 245);
     border-radius: 15px;
-    background-clip: white;
-    box-shadow: 0px 5px 7px -7px rgba(0, 0, 0, 0.75);
+    margin-top: 15px;
+    box-shadow: 0px 5px 10px -7px rgba(0,0,0,0.7);
 }
 
-.post__image>img {
-    width: 100%;
-}
-
-.post__top {
+.PostTop{
     display: flex;
-    position: relative;
     align-items: center;
-    padding: 15px;
+    position: relative;
+    padding:15px;
 }
-
-.post__avatar {
+.postAvatar{
     margin-right: 10px;
 }
-
-.post__topInfo>h3 {
+.postTopInfo>h3{
     font-size: medium;
 }
-
-.post__topInfo>p {
+.postTopInfo>p{
     font-size: small;
-    color: gray;
+    color:gray;
 }
-
-.post__bottom {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 15px 25px;
-}
-
-.post__options {
-    padding: 10px;
+.postOptions{
+    padding:15px;
     border-top: 1px solid lightgray;
+    cursor: pointer;
     display: flex;
     justify-content: space-evenly;
     font-size: medium;
-    color: gray;
-    cursor: pointer;
-    padding: 15px;
-}
+    color:gray;
 
-.post__option {
+}
+.postOption{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 5px;
+    padding:5px;
     float: 1;
 }
-
-.post__option>p {
+.postOption>p{
     margin-left: 10px;
 }
-
-.post__option:hover {
-    background-color: #eff2f5;
+.postOption:hover{
+    background-color: white;
     border-radius: 10px;
+}
+.post_bottom{
+margin-top: 10px;
+margin-bottom: 10px;
+padding : 15px 25px;
 }

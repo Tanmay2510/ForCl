@@ -1,16 +1,15 @@
+import { Avatar } from '@mui/material'
 import React from 'react'
-import { Avatar } from '@material-ui/core'
-import './SidebarRow.css'
+import "./Sidebarrow.css"
 
-const SidebarRow = ({ src, Icon, title }) => {
-    return (
-        <div className='sidebarRow' >
-            {src && <Avatar src={src} />}
-            {Icon && <Icon />}
-
-            <p>{title}</p>
-        </div>
-    )
+const Sidebarrow = ({src , Icon ,title}) => {
+  return (
+    <div className='SideBarrow'>
+    {src && <Avatar src ={src} />}
+    {Icon && <Icon />}
+    <p>{title}</p>
+    </div>
+  )
 }
 
-export default SidebarRow
+export default Sidebarrow
