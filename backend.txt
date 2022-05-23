@@ -148,3 +148,56 @@ app.post('/upload/post',(req,res)=>{
         }
     })
 })
+
+save the image >> save post w/image name
+retrieve post >> retrieve the image
+cuz we are saving the image and post w/two diff coll so das y we need to 
+save the name next to the post so that we'll be able to filter using the name
+So first we get back all the post and we go over there one by one  
+and snap it next to the post whenn we rendering it 
+
+api route,
+
+app.get('/retrieve/posts',(req,res)=>{
+    mongoPosts.find((err,data)=>{
+        if(err){
+            res.status(500).send(err)
+        }else{
+            // sort the data based on the timestamp
+            data.sort((b,a)=>{
+                return a.timestamp-b.timestamp
+            })
+            res.status(200).send(data)
+        }
+    })
+})
+
+creating the filter featuring end point that'll throw the image to frontend
+app.get('/retrieve/images/single'(req,res){
+    
+    //we;ll use the findone fx of grid fs and it's gonna find in the files nd shit
+    gfs.files.findone({
+        filename:req.query.name
+    },(err,file)=>{
+        if(err){
+            res.s(500).send(err)
+        }else{
+            the file is actually the file that we want
+            if(!file || file.length===0){ if there is no file
+                res.s(404).json({err:"filenotfound"})
+            }else{
+                //create a readstream which is essentially like reading the file out of gfs storage
+                const readstream = gfs.createReadStream(file.filenam)
+
+                //the grabbed file will be pushed back
+                readstream.pipe(res);
+            }
+        }
+    })
+})
+postman,
+lh:9000/retrieve/images/single/name
+we'll actually be calling the link i/s of the post file 
+
+
+

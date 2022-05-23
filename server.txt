@@ -1,0 +1,105 @@
+import express from "express"
+import mongoose from "mongoose"
+import  cors from "cors"
+import multer from "multer"     
+import {GridFsStorage} from "multer-gridfs-storage"
+import Grid from "gridfs-stream"
+import bodyParser from "body-parser"
+import path, { resolve } from "path"
+import Pusher from "pusher"
+const {Promise} =mongoose;
+// gridFS: to store images 
+// multer: is accepting the image
+// multer-gridfs-storage : where we store our images 
+// gridfs-stream: rendering out stuff to users
+// path and pusher : for app to be real time
+//pusher: thing to make it real time basically rerendering a component && responsible for making mongodb realtime
+//pusher: is actually able to push the data that was just added to mongodb to the frontend
+//multer : is an pkg to upload images and file and whwat not
+
+
+Grid.mongo=mongoose.mongo;
+
+
+//app config
+const app = express();
+const port = process.env.PORT || 9000 
+// it there is process env file by heroku then we'll use it if not we'll use ours
+
+//middlewares
+app.use(bodyParser.json()); //essentially be making the app being able to r,w,work with json files 
+app.use(cors());
+
+
+
+//db config
+ const mongoURI ='mongodb+srv://admin:<password>@cluster0.lvadn.mongodb.net/fbdb?retryWrites=true&w=majority';
+ 
+ //when upld image, it'll save it to a var
+ const conn = mongoose.createConnection(mongoURI,{
+    
+     useNewUrlParser:true
+ })
+
+ //simple connect w/mongoose
+ mongoose.connect(mongoURI,{
+
+    useNewUrlParser:true
+ })
+
+ //one thing we wanna do is cl both connection whenever they're up and running 
+ mongoose.connection.once('open',()=>{
+     console.log("DB connected");
+ })
+
+ let gfs;
+
+ conn.once("open",()=>{
+     console.log("DB connected");
+    //  pretty much setting the target of gfs so the conn db i/s of a mdb
+     gfs= Grid(conn.db,mongoose.mongo);
+    //  the other thing that'll we'll be doing here is define an coll where we'll save all our img
+    gfs.collection('images');
+
+ })
+
+ //creating a actual storage where we'll store all our images,
+ var storage = new GridFsStorage({
+    url: mongoURI,
+    file: (req,file)=>{
+      return new Promise((reject,resolve)=>{
+        {
+          const filename = 'image-${Date.now()}${path.extname(file.originalname)}'
+          const fileinfo={
+            filename:filename,
+            bucketname:'images'
+          }
+          resolve(fileinfo);
+
+        }
+      })
+    }
+    
+  });
+
+ //we need to set above shit so that it's gonna be used as the def storage,
+ const upload = multer({storage}) //we'd now be able to upload a file 
+ //this is gonn be the mthd that we'll be using to upload the file
+
+//api routes
+app.get('/',(req,res)=> res.status(200).send("hello world"));
+//image add,
+//get: to actually showing it to you 
+//post: for uploading an image to fb
+//put : changing your prof pic you're using the put req
+
+//DB PWD:WJ0VKnp9NDwkYZzl
+
+//u.s('f') we'll be looking the file i.e image in the file field also the will be only one
+app.post("/upload/image",upload.single('file'),(req,res)=>{
+    res.status(201).send(req.file);
+})
+
+
+//listen
+app.listen(port,() => console.log(`Listening on lh ${port}`));

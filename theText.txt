@@ -1,0 +1,4 @@
+type:module,
+  // we;ll be doing es6 stuff importing the module from the package
+start: node server.js,
+it'll be needed for heroku to be able to start the app by itself
